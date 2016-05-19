@@ -7,15 +7,20 @@ var builder = ProtoBuf.loadProtoFile("./image.proto");
 var WebSocketServer = require('ws').Server;
 var wss = new WebSocketServer({ server: '192.168.0.16', port: 9090 });
 
+var imagesServed = 0;
+
 wss.on('connection', function connection(ws) {
   
   console.log('connected');
 
   ws.on('message', function incoming(message) {
     console.log('received: %s', message);
+
+    imagesServed++;
     console.log('responding...');
     var buffer = buildRandomMessage();
     ws.send(buffer.toArrayBuffer(), { binary: true, mask: true });
+	console.log(imagesServed + ' images served');
   });
 
 });
