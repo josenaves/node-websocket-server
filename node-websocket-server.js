@@ -14,8 +14,8 @@ var imagesServed = 0;
 wss.on('connection', function connection(ws) {
   console.log('connected');
   console.log('responding...');
-  
-  var buffer = getFlorianopolisPicture();
+
+  var buffer = getPicture('tree.jpg');
   ws.send(buffer.toArrayBuffer(), { binary: true, mask: true });
 
   imagesServed++;
@@ -31,32 +31,9 @@ wss.on('connection', function connection(ws) {
   // });
 });
 
-function getFlorianopolisPicture() {
+function getPicture(name) {
 
   var Image = builder.build('com.josenaves.android.pb.restful.Image');
-  var name = 'florianopolis.jpg';
-
-  var imageMini = shrinkImage(name);
-  if (!imageMini) {
-    console.error('Error in JPEGmini integration!');
-    return;
-  }
-
-  var id = uuid.v1();
-  var data = fs.readFileSync(imageMini);
-  var datetime = new Date().toISOString()
-    .replace(/T/, ' ')      // replace T with a space
-    .replace(/\..+/, '');
-  
-  var imagePB = new Image(id, imageMini, datetime, data);
-  
-  return imagePB.encode();
-}
-
-function getTreePicture() {
-
-  var Image = builder.build('com.josenaves.android.pb.restful.Image');
-  var name = 'tree.jpg';
 
   var imageMini = shrinkImage(name);
   if (!imageMini) {
